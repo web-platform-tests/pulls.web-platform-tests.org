@@ -1,0 +1,2 @@
+flask==0.12
+flask-sqlalchemy==2.2

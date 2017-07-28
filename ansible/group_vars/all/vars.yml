@@ -118,6 +118,13 @@ users:
     shadow_pass: $1$uf5pXGpc$D160EhELWfQoLFqFBAzIi0
     public_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp5D7Lzs+z+iAbj/BAeV3tvh91lGSl8uzKfTZp17o1Iq0Rv8n9AZOjaoud5bm4sOP9udU8w2Nt09Suf9ldKeKhWkxKCj9VcCxhjXNgTp0gkcjuuUO7nrIT4PZICFE98YISSNfWtQoPzXmS7AoxcCuGLedj9x9Nd73UodNYEKIcb4TCHf/peLm2NAP5S76W2p1FSnzzE9CGtz+CSAenKEf40GXwO6Zz6m8mgAB/UhBbJ/o5JZDqZNFW7/vYU4pW/9tqH6YZvKeYoHuEBvgg3RjFcoRp+/PQ5DXZyKX9rSgSAOKu70a3L0KU/paTv0P2nB85l5LjCaf4DYNCOWVAEOgEw== bobholt@gmail.com
+  - name: jgraham
+    state: present
+    real_name: James Graham
+    groups: sudo,www-data
+    shadow_pass: $1$u8ZtS5S+$VoiH0snQQrKDESTWqrCVS.
+    public_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv+Vv5+pW5DBlNMRlKk4YrEHMbVIvFcaukpwaK2fkfW3qftG+QlpANlTKKhL5Ay/vChnlH/ww0ahxQaS2FIzkKrsvkp9L0fFXMEAdAWaXZ2lWZtpy8npV/rNluL+d1AkV/Xe3+Zz4BGO2VWBaxoH7vbcHqxuGczXc4OvcZVrAlc0QsWUhmFGPJkF3DFtWVB5dd54M5JqeyKBNYxT8CnWt7VtI8b2zzHtNrFod6DXMCtCU7WlQUGynqfxWSv+uqp3SMCbl94CgyQe3QsTri8Q1rsHvzdJEHulhHWc3ZXECSC/+/9xtlbW/tfTTA26FrjiVDGKF5Npt9m5Ku+HVp6t93 james@ginny
 
 
 ########

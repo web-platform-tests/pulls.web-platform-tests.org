@@ -1,0 +1,9 @@
+# Prep VM with local user account so developers can run Ansible against it
+# like any other server.
+
+- hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: link vagrant synced directory to make it live
+      file: path={{site_path}} state=link src={{synced_folder}} force=yes

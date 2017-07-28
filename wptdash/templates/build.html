@@ -1,0 +1,108 @@
+{% set job_status_classes = {
+    'CREATED': 'active',
+    'QUEUED': 'active',
+    'STARTED': 'active',
+    'PASSED': 'success',
+    'FAILED': 'danger',
+    'ERRORED': 'danger',
+    'FINISHED': 'success',
+} %}
+{% set build_status_classes = {
+    'PENDING': 'default',
+    'PASSED': 'success',
+    'FIXED': 'success',
+    'BROKEN': 'danger',
+    'FAILED': 'danger',
+    'STILL_FAILING': 'danger',
+    'CANCELLED': 'default',
+    'ERRORED': 'danger',
+} %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Build {{build_number}} details</title>
+    <link rel=stylesheet href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+  </head>
+  <body class="container">
+    <div class="page-header">
+      <h1>
+        Build {{build_number}}
+        {% if build %}
+          <small>
+            for pull request
+            <a href="{{ url_for('routes.pull_detail', pull_number=build.pull_request.number) }}">{{ build.pull_request.number }}</a>
+          </small>
+        {% endif %}
+      </h1>
+      {% if build %}
+      <p><a href="https://travis-ci.org/{{org_name}}/{{repo_name}}/builds/{{build.id}}">View on TravisCI</a></p>
+      {% endif %}
+    </div>
+
+    {% if not build %}
+      <p>
+        No information to display for Build {{build_number}}.
+      </p>
+      <p>
+        <a href="{{ url_for('routes.main') }}">Home</a>
+      </p>
+    {% else %}
+      <dl>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Status</dt>
+            <dd class="label label-{{build_status_classes[build.status.name]}}">{{ build.status.name }}</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Started</dt>
+            <dd>{{ build.started_at }}</dd>
+          </div>
+          <div class="col-xs-4">
+            {% if build.finished_at %}
+              <dt>Finished</dt>
+              <dd>{{ build.finished_at }}</dd>
+            {% endif %}
+          </div>
+        </div>
+      </dl>
+
+      {% if not build.jobs|length %}
+        <p>No jobs for this build.</p>
+      {% else %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Job Number</th>
+              <th>Product</th>
+              <th>Status</th>
+              <th>Started</th>
+              <th>Ended</th>
+              <th>Allowed Failure</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job in build.jobs|sort(attribute='id') %}
+              {% set job_number_encoded = job.number|urlencode %}
+              <tr class="{{job_status_classes[job.state.name]}}">
+                <td>
+                  <a href="{{ url_for('routes.job_detail', job_number=job_number_encoded) }}">{{ job.number }}</a>
+                </td>
+                <td>{{ job.product.name|replace(':', ' ')|title }}</td>
+                <td>{{ job.state.name|capitalize }}</td>
+                <td>{{ job.started_at }}</td>
+                <td>{{ job.finished_at }}</td>
+                <td>{{ 'Yes' if job.allow_failure else 'No' }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.css') }}"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

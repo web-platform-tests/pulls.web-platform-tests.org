@@ -1,0 +1,197 @@
+---
+
+#########
+# PROJECT
+#########
+
+# Certain tasks may operate in a less secure (but more convenient) manner, eg.
+# enabling passwordless sudo or generating self-signed ssl certs, when testing
+# locally, in Vagrant. But not in production!
+env: production
+
+# This var is referenced by a few other vars, eg. git_repo, hostname, site_fqdn.
+project_name: wptdash
+
+# This is what you'll see at the bash prompt if/when you ssh into your server.
+hostname: "{{project_name}}"
+
+# This is the fully qualified domain name of your production server. Because
+# nginx checks this value against the URL being requested, it must be the same
+# as the server's DNS name. This value is overridden for Vagrant and staging
+# servers.
+# site_fqdn: "{{project_name}}.com"
+site_fqdn: "pulls.web-platform-tests.org"
+
+
+##############
+# PROVISIONING
+##############
+
+# Keys to be added to apt.
+apt_keys:
+  - "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+
+# Repos to be added to apt. Useful repos:
+# Git latest:     ppa:git-core/ppa
+apt_repos:
+  - "ppa:git-core/ppa"
+  - "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+
+# Any apt packages to install. Apt package versions may be specified like
+# - git=2.1.0
+apt_packages:
+  - build-essential
+  - libssl-dev
+  - python-pip
+  - python3
+  - python3-dev
+  - python3-pip
+  - unattended-upgrades
+  - nginx
+  - git
+  - libpq-dev
+  - postgresql-9.6
+  - postgresql-contrib-9.6
+  - postgresql-client-9.6
+
+pip2_packages:
+  - psycopg2
+
+pip3_packages:
+  - pip
+  - ansible
+  - virtualenv
+  - uwsgi
+  - psycopg2
+
+
+############
+# WEB SERVER
+############
+
+# Should the nginx server use HTTPS instead of HTTP?
+ssl: false
+
+# If ssl is enabled, these cert/key files will be used by nginx. You will need
+# to ensure these files are valid and already on the server (which you can do
+# via cloud-init, scp, etc).
+ssl_cert_path: /etc/ssl/star.{{project_name}}.com.cert
+ssl_key_path: /etc/ssl/star.{{project_name}}.com.key
+
+# Use a custom parameter for stronger DHE key exchange.
+dhe_param_path: /etc/ssl/certs/dhparam.pem
+
+# Nginx dir and conf dir.
+nginx_dir: /etc/nginx
+conf_dir: "{{nginx_dir}}/conf.d"
+
+# Nginx templated configuration files to create.
+shared:
+  - file: ssl_params.j2
+    dest: "{{nginx_dir}}/ssl_params"
+  - file: gzip_params.j2
+    dest: "{{nginx_dir}}/gzip_params"
+confs:
+  - file: site.conf.j2
+    dest: "{{conf_dir}}/site.conf"
+
+
+#######
+# USERS
+#######
+
+# Specified users will be added to the remote server, along with all specified
+# public keys. Removing a user from this list does NOT remove them from the
+# remote server! You need to set their state to "absent", remove all the other
+# properties for that user, and re-run the "configure" playbook. Also, the
+# shadow password (that user's sudo password) should be a hash, and NOT plain
+# text!
+#
+# Generate a shadow password hash using the following command:
+# openssl passwd -1 -salt $(openssl rand -base64 6) yourpassword
+#
+users:
+  - name: bobholt
+    state: present
+    real_name: Bob Holt
+    groups: sudo,www-data
+    shadow_pass: $1$uf5pXGpc$D160EhELWfQoLFqFBAzIi0
+    public_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp5D7Lzs+z+iAbj/BAeV3tvh91lGSl8uzKfTZp17o1Iq0Rv8n9AZOjaoud5bm4sOP9udU8w2Nt09Suf9ldKeKhWkxKCj9VcCxhjXNgTp0gkcjuuUO7nrIT4PZICFE98YISSNfWtQoPzXmS7AoxcCuGLedj9x9Nd73UodNYEKIcb4TCHf/peLm2NAP5S76W2p1FSnzzE9CGtz+CSAenKEf40GXwO6Zz6m8mgAB/UhBbJ/o5JZDqZNFW7/vYU4pW/9tqH6YZvKeYoHuEBvgg3RjFcoRp+/PQ5DXZyKX9rSgSAOKu70a3L0KU/paTv0P2nB85l5LjCaf4DYNCOWVAEOgEw== bobholt@gmail.com
+
+
+########
+# DEPLOY
+########
+
+# Parent directory for cloned repository directories. The clone_path and
+# site_path should be children of this directory.
+base_path: "/var/www/{{project_name}}"
+
+# Temporary location where the Git repo will be cloned and the build scripts
+# will be run before going live.
+clone_path: "{{base_path}}/temp"
+
+# Where the production site symlink will exist.
+site_path: "{{base_path}}/site"
+
+# If defined, only this many of the most recent clone directories (including the
+# current specified commit) will be retained. Anything older will be removed,
+# once the current clone has been made live.
+keep_n_most_recent: 3
+
+# If this variable is defined, a file containing build information, including
+# the timestamp, commit, sha, and a few other useful values will be generated
+# after the build has completed. This file is relative to your project root.
+build_info_path: "wptdash/static/build.txt"
+
+# If these variables are uncommented, add swap space to the machine when the
+# configure playbook is run. The swap configuration controlled by this is
+# meant to address installation problems on machines with minimal ram (e.g.
+# npm bails during install because it runs out of memory)
+#swap_file_path: /swap
+#swap_file_size: 2GB
+
+
+###################
+# DEPLOY EXTRA VARS
+###################
+
+# Specify any valid remote (typically a github user)
+remote: bobholt
+
+# Specify any ref (eg. branch, tag, SHA) to be deployed. This ref must be
+# pushed to the remote git_repo before it can be deployed.
+commit: master
+
+# Git repo address.
+# For private repositories: git@github.com:{{remote}}/{{project_name}}.git
+# For public: https://github.com/{{remote}}/{{project_name}}
+git_repo: https://github.com/{{remote}}/{{project_name}}
+
+# Uncomment this if if you are checking out a private repo
+# ansible_ssh_common_args: -o ForwardAgent=yes
+
+# Clone and build the specified commit SHA, regardless of prior build status.
+force: false
+
+# Use the local project Git repo instead of the remote git_repo. This option
+# only works with the vagrant inventory, and not with staging or production.
+local: false
+
+
+###########################
+# APPLICATION CONFIGURATION
+###########################
+
+#nonsensitive data
+db_name: wptdash
+db_user: wptdash
+github_org: bobholt
+github_repo: web-platform-tests
+github_commenter: bobholt
+
+#sensitive data
+db_password: "{{ vault_db_password }}"
+github_commenter_token: "{{ vault_github_commenter_token }}"
+github_webhook_token: "{{ vault_github_webhook_token }}"

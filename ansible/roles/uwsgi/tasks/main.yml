@@ -1,0 +1,33 @@
+- name: Remove existing uwsgi socket
+  file:
+    path: /tmp/{{project_name}}.sock
+    state: absent
+
+- name: Create /etc/uwsgi
+  file:
+    path: /etc/uwsgi/vassals
+    state: directory
+
+- name: uwsgi.ini is loaded
+  template:
+    src: uwsgi.ini.j2
+    dest: /etc/uwsgi/vassals/{{project_name}}_uwsgi.ini
+    backup: no
+
+- name: emperor.ini is loaded
+  template:
+    src: emperor.ini.j2
+    dest: /etc/uwsgi/emperor.ini
+
+- name: Emperor service is loaded
+  template:
+    src: emperor.uwsgi.service.j2
+    dest: /etc/systemd/system/emperor.uwsgi.service
+    backup: no
+
+- name: Start uwsgi-emperor
+  systemd:
+    name: emperor.uwsgi
+    daemon_reload: yes
+    enabled: yes
+    state: restarted

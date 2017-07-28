@@ -1,0 +1,179 @@
+{% set job_status_classes = {
+    'CREATED': 'active',
+    'QUEUED': 'active',
+    'STARTED': 'active',
+    'PASSED': 'success',
+    'FAILED': 'danger',
+    'ERRORED': 'danger',
+    'FINISHED': 'success',
+} %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Job {{job_number}} details</title>
+    <link rel=stylesheet href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+  </head>
+  <body class="container">
+    <div class="page-header">
+      <h1>
+        Job {{job_number}}
+        {% if job %}
+          <small>
+            for build
+            <a href="{{ url_for('routes.build_detail', build_number=job.build.number) }}">{{ job.build.number }}</a>
+            in pull request
+            <a href="{{ url_for('routes.pull_detail', pull_number=job.build.pull_request.number) }}">{{ job.build.pull_request.number }}</a>
+          </small>
+        {% endif %}
+      </h1>
+      {% if job %}
+        <h2>
+          {{ job.product.name|replace(':', ' ')|title  }}
+        </h2>
+        <p><a href="https://travis-ci.org/{{org_name}}/{{repo_name}}/jobs/{{job.id}}">View on TravisCI</a></p>
+      {% endif %}
+    </div>
+
+    {% if not job %}
+      <p>
+        No information to display for Job {{job_number}}.
+      </p>
+      <p>
+        <a href="{{ url_for('routes.main') }}">Home</a>
+      </p>
+    {% else %}
+      <dl>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Status</dt>
+            <dd class="label label-{{job_status_classes[job.state.name]}}">{{ job.state.name }}</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Started</dt>
+            <dd>{{ job.started_at }}</dd>
+          </div>
+          <div class="col-xs-4">
+            {% if job.finished_at %}
+              <dt>Finished</dt>
+              <dd>{{ job.finished_at }}</dd>
+            {% endif %}
+          </div>
+        </div>
+      </dl>
+
+      {% set inconsistent_tests = job.tests|selectattr("consistent", "sameas", false)|list %}
+      {% if not job.tests|length %}
+        <p>No tests for this job.</p>
+      {% else %}
+        {% if inconsistent_tests|length %}
+          <h3>Unstable Results</h3>
+          <table class="table">
+            <tr>
+              <th>Test</th>
+              <th>Subtest</th>
+              <th>Results</th>
+              <th>Messages</th>
+            </tr>
+            {% for result in inconsistent_tests %}
+              {% if not result.test.parent %}
+                <tr>
+                  <td><code>{{ result.test.id }}</code></td>
+                  <td>&nbsp;</td>
+                  <td>
+                    {% for status in result.statuses %}
+                      {{status.status.name}}: {{status.count}}<br />
+                    {% endfor %}
+                  </td>
+                  <td>
+                    {% if result.messages %}
+                      {% set messages = result.messages|fromjson %}
+                      {% if messages|length %}
+                        {% for message in messages %}
+                          <code>{{ message }}</code><br />
+                        {% endfor %}
+                      {% endif %}
+                    {% endif %}
+                  </td>
+                </tr>
+                {% if result.test.subtests|length %}
+                  {% for subresult in job.tests %}
+                    {% if subresult.test.parent_id and subresult.test.parent_id == result.test.id and not subresult.test.consistent %}
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td><code>{{ subresult.test.id }}</code></td>
+                        <td>
+                          {% for status in subresult.statuses %}
+                            {{status.status.name}}: {{status.count}}<br />
+                          {% endfor %}
+                        </td>
+                        <td>
+                          {% if subresult.messages %}
+                            {% set messages = subresult.messages|fromjson %}
+                            {% if messages|length %}
+                              {% for message in messages %}
+                                <code>{{ message }}</code><br />
+                              {% endfor %}
+                            {% endif %}
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </table>
+        {% endif %}
+        <h3>All Results</h3>
+        {% for result in job.tests %}
+          {% if not result.test.parent %}
+            <details>
+              <summary><code>{{ result.test.id }}</code></summary>
+              {% if result.test.subtests|length %}
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Subtest</th>
+                      <th>Results</th>
+                      <th>Messages</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for subresult in job.tests %}
+                      {% if subresult.test.parent_id and subresult.test.parent_id == result.test.id %}
+                        <tr>
+                          <td><code>{{subresult.test.id}}</code></td>
+                          <td>
+                            {% for status in subresult.statuses %}
+                              {{status.status.name}}: {{status.count}}<br />
+                            {% endfor %}
+                          </td>
+                          <td>
+                            {% if subresult.messages %}
+                              {% set messages = subresult.messages|fromjson %}
+                              {% if messages|length %}
+                                {% for message in messages %}
+                                  <code>{{ message }}</code><br />
+                                {% endfor %}
+                              {% endif %}
+                            {% endif %}
+                          </td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% endif %}
+            </details>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.css') }}"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

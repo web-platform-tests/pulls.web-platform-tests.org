@@ -1,0 +1,20 @@
+# All project build tasks go here. These tasks will only be run for the
+# specified commit if the commit hasn't been deployed before or if "force"
+# is true.
+
+# Modify as-needed!
+
+- name: Install Flask App
+  pip:
+    name: "{{clone_path}}"
+    state: present
+    virtualenv: "{{base_path}}/venv"
+    virtualenv_python: python3
+    virtualenv_site_packages: yes
+  become: yes
+  become_user: www-data
+  notify: restart uwsgi
+
+- name: generate build info file
+  template: src=build.txt.j2 dest={{clone_path}}/{{build_info_path}}
+  when: build_info_path is defined

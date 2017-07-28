@@ -1,18 +1,124 @@
+{% set build_status_classes = {
+    'PENDING': 'active',
+    'PASSED': 'success',
+    'FIXED': 'success',
+    'BROKEN': 'danger',
+    'FAILED': 'danger',
+    'STILL_FAILING': 'danger',
+    'CANCELLED': 'info',
+    'ERRORED': 'danger',
+} %}
 <!doctype html>
-<meta charset=utf8>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pull Request {{pull_number}} details</title>
+    <link rel=stylesheet href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+  </head>
+  <body class="container">
+    <div class="page-header">
+      <h1>
+        Pull Request {{pull_number}}{% if pull %}:
+          <small>{{pull.title}}</small>
+        {% endif %}</h1>
+    </div>
 
-<title>Pull Request {{pull.id}} details</title>
+    {% if not pull %}
+      <p>
+        No information to display for Pull Request {{pull_number}}. Try checking
+        <a href="https://github.com/w3c/web-platform-tests/pull/{{pull_number}}">
+          GitHub
+        </a>
+      </p>
+    {% else %}
+      <p>
+        {{ pull.creator.login}} wants to merge from
+        <code>
+          {{pull.head_repository.owner.login}}/{{pull.head_repository.name}}
+        </code>
+        to
+        <code>
+          {{pull.base_repository.owner.login}}/{{pull.base_repository.name}}
+        </code>.
+      </p>
+      <dl>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Status</dt>
+            <dd>{{ pull.state.name }}</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Opened</dt>
+            <dd>{{ pull.created_at }}</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Last Updated</dt>
+            <dd>{{ pull.updated_at }}</dd>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Merged</dt>
+            <dd>{{ 'Yes' if pull.merged else 'No' }}</dd>
+          </div>
+          <div class="col-xs-4">
+            {% if pull.mirror_url %}
+              <dt>Mirrored at</dt>
+              <dd>{{ pull.mirror_url }}</dd>
+            {% endif %}
+          </div>
+          <div class="col-xs-4">
+            {% if pull.closed_at %}
+              <dt>Closed</dt>
+              <dd>{{ pull.closed_at }}</dd>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            {% if pull.merged %}
+              <dt>Merged By</dt>
+              <dd>{{ pull.merger.login }}</dd>
+            {% endif %}
+          </div>
+          <div class="col-xs-4">
+            {% if pull.merged %}
+              <dt>Merged At</dt>
+              <dd>{{ pull.merged_at }}</dd>
+            {% endif %}
+          </div>
+        </div>
+      </dl>
 
-<h1>Pull Request {{pull.id}}</h1>
-
-<table>
-  <tr>
-    <th>Product
-    <th>Status
-  </tr>
-{% for job in pull.stability_jobs %}
-  <tr>
-    <td>{{ job.product.name }}
-    <td>{{ job.status.name }}
-  </tr>
-{% endfor %}
+      {% if not pull.builds %}
+        <p>No builds yet for this pull request.</p>
+      {% else %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Build Number</th>
+              <th>Status</th>
+              <th>Started</th>
+              <th>Ended</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for build in pull.builds %}
+              <tr class="{{build_status_classes[build.status.name]}}">
+                <td><a href="{{ url_for('routes.build_detail', build_number=build.number) }}">{{ build.number }}</a></td>
+                <td>{{ build.status.name }}</td>
+                <td>{{ build.started_at }}</td>
+                <td>{{ build.finished_at }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.css') }}"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

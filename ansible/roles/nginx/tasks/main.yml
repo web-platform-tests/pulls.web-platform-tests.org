@@ -1,0 +1,66 @@
+# Generate nginx config files (and ssl configuration, if ssl was specified),
+# rolling back changes if any part of the config is invalid.
+
+- include: ssl.yml
+  when: ssl
+
+- name: create path for server logs
+  file:
+    path: "{{site_path}}/logs"
+    state: directory
+
+- name: ensure default nginx server is not present
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
+
+- name: ensure nginx config files exist
+  shell: touch {{item.dest}}
+  args:
+    creates: "{{item.dest}}"
+  with_flattened:
+    - "{{confs}}"
+    - "{{shared}}"
+  notify: reload nginx
+
+- name: backup existing nginx config files
+  shell: cp {{item.dest}} {{item.dest}}.backup
+  with_flattened:
+    - "{{confs}}"
+    - "{{shared}}"
+  notify: reload nginx
+
+- name: generate new nginx config files
+  template:
+    src: "{{item.file}}"
+    dest: "{{item.dest}}"
+  register: nginx_conf
+  with_flattened:
+    - "{{confs}}"
+    - "{{shared}}"
+  notify: reload nginx
+
+- name: ensure nginx config is valid
+  shell: nginx -t
+  ignore_errors: yes
+  register: nginx_test_valid
+  changed_when: false
+  when: nginx_conf | changed
+
+- name: remove temporary backups if new nginx config files are valid
+  file: path={{item.dest}}.backup state=absent
+  with_flattened:
+    - "{{confs}}"
+    - "{{shared}}"
+  when: nginx_test_valid | success
+  notify: reload nginx
+
+- name: restore temporary backups if new nginx config files are invalid
+  shell: mv {{item.dest}}.backup {{item.dest}}
+  with_items: "{{confs}}"
+  when: nginx_test_valid | failed
+  notify: reload nginx
+
+- fail: msg="nginx config is invalid"
+  when: nginx_test_valid | failed

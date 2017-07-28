@@ -1,0 +1,7 @@
+# Specify your production app server here. This should match the ansible
+# group_vars/all site_fqdn setting.
+
+pulls.web-platform-tests.org
+
+[all:vars]
+ansible_python_interpreter=python3

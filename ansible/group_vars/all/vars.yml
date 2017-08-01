@@ -125,6 +125,13 @@ users:
     shadow_pass: $1$u8ZtS5S+$VoiH0snQQrKDESTWqrCVS.
     public_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv+Vv5+pW5DBlNMRlKk4YrEHMbVIvFcaukpwaK2fkfW3qftG+QlpANlTKKhL5Ay/vChnlH/ww0ahxQaS2FIzkKrsvkp9L0fFXMEAdAWaXZ2lWZtpy8npV/rNluL+d1AkV/Xe3+Zz4BGO2VWBaxoH7vbcHqxuGczXc4OvcZVrAlc0QsWUhmFGPJkF3DFtWVB5dd54M5JqeyKBNYxT8CnWt7VtI8b2zzHtNrFod6DXMCtCU7WlQUGynqfxWSv+uqp3SMCbl94CgyQe3QsTri8Q1rsHvzdJEHulhHWc3ZXECSC/+/9xtlbW/tfTTA26FrjiVDGKF5Npt9m5Ku+HVp6t93 james@ginny
+  - name: mike
+    state: present
+    real_name: Michael[tm] Smith
+    groups: sudo,www-data
+    shadow_pass: $1$exlnj24t$RAvjY2xheyM869dIyPOiE0
+    public_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCd6sJOl6gxcN050TZTo8OxuU84Xom+cmxuj3vsmtF+fAt22x1OZQ7gBZET4mqeEDjzZpyzjRzmmvv4QfDFbKgDlvy1uDE2jISPMftT1nk8a/+VDG/MuMQHpd2qddO3biPwcXLl/KpeegdFOUXyFO3Ez5Royu9k9WF/1Fda+MH8Sf5v9BuByFK7xJ4qo2GRzkaN0PzKCRn2T+fOYAX/VPHymocyW/E3Ykzj3qRHCHNxHOrjf31xFpIab4Si2aGb87OutilcmdV5bH8Ru/iP9ZdS7jcY/s5ZSs40YzV8i6wQoIcPo4GCmwK9EgHK4q+VtxT0oPqyWalFX0JOP9ajjNXPWvaVGQGm6ALmtoVwiy9kBimpKrqPxK4jIIKyGkhpIJPrYwa8oOKiWEolMRj2UoMlCQHjP9KZ7phQoxQM6HgFDLu9WpCGilOc0UIHUkuwPJTxbjb9wqmsztcbrLlSsuuCCNYP8Kan1W3wv0g8nLhifRlv6/4iggmdBjL4eIJfSyAFm/HSm81cNsjkadiHeNY3ezSvJYzhNuEbdO5YclUg3GLQbrJOumawqLkU2qulLC5DM+GxbNQxDQBNCT5RFWdsByQy8LRD5Jnp/jA1wv+Wg8Y+MDTQgR0It29QWvihDlVM9cLclH0CARAp06IMUujHpbWbb3YfBy1PwgKiHrq79w== mike@w3.org
 
 
 ########

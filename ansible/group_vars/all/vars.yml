@@ -172,7 +172,7 @@ build_info_path: "wptdash/static/build.txt"
 ###################
 
 # Specify any valid remote (typically a github user)
-remote: bobholt
+remote: w3c
 
 # Specify any ref (eg. branch, tag, SHA) to be deployed. This ref must be
 # pushed to the remote git_repo before it can be deployed.
@@ -201,9 +201,9 @@ local: false
 #nonsensitive data
 db_name: wptdash
 db_user: wptdash
-github_org: bobholt
+github_org: w3c
 github_repo: web-platform-tests
-github_commenter: bobholt
+github_commenter: w3c-bots
 
 #sensitive data
 db_password: "{{ vault_db_password }}"

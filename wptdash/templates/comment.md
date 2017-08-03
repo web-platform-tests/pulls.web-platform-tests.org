@@ -1,6 +1,3 @@
-{% set build = pull.builds|sort(attribute='number', reverse=True)|first %}
-{% set has_unstable = build.jobs|map(attribute='tests')|map('selectattr', 'consistent', 'sameas', false)|list|length %}
-
 # Build {{ build.status.name }}
 
 Started: {{ build.started_at }}

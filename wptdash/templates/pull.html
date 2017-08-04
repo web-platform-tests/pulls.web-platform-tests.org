@@ -106,7 +106,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for build in pull.builds %}
+            {% for build in pull.builds|sort(attribute='started_at', reverse=True) %}
               <tr class="{{build_status_classes[build.status.name]}}">
                 <td><a href="{{ url_for('routes.build_detail', build_number=build.number) }}">{{ build.number }}</a></td>
                 <td>{{ build.status.name }}</td>

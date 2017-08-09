@@ -27,6 +27,7 @@
             <th>Title</th>
             <th>Status</th>
             <th>Last Updated</th>
+            <th>GitHub</th>
           </tr>
         </thead>
         <tbody>
@@ -37,6 +38,11 @@
               <td><a href="{{ url_for('routes.pull_detail', pull_number=pull.number) }}">{{ pull.title }}</a></td>
               <td>{{ pull.state.name }}</td>
               <td>{{ pull.updated_at }}</td>
+              <td>
+                <a href="https://github.com/w3c/web-platform-tests/pull/{{pull.number}}">
+                  PR #{{ pull.number }}
+                </a>
+              </td>
             </tr>
           {% endfor %}
         </tbody>

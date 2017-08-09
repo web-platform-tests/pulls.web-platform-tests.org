@@ -35,6 +35,11 @@
       </p>
     {% else %}
       <p>
+        <a href="https://github.com/w3c/web-platform-tests/pull/{{pull_number}}">
+          View PR on GitHub
+        </a>
+      </p>
+      <p>
         {{ pull.creator.login}} wants to merge from
         <code>
           {{pull.head_repository.owner.login}}/{{pull.head_repository.name}}

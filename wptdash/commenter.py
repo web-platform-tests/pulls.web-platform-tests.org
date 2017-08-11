@@ -22,24 +22,28 @@ def update_github_comment(pr):
         github = GitHub()
         build = sorted(pr.builds, key=attrgetter('started_at'), reverse=True)[0]
         has_unstable = False
+        failing_jobs = []
         for job in build.jobs:
-            for test in job.tests:
-                if not test.consistent:
-                    has_unstable = True
-                    break
-            if has_unstable:
-                break
+            if job.state.name == 'FAILED':
+                failing_jobs.append(job.product.name)
+            if not has_unstable:
+                for test in job.tests:
+                    if not test.consistent:
+                        has_unstable = True
+                        break
 
         comment = render_template('comment.md', build=build,
                                   app_domain=APP_DOMAIN, org_name=ORG_NAME,
                                   repo_name=REPO_NAME,
-                                  has_unstable=has_unstable)
+                                  has_unstable=has_unstable,
+                                  failing_jobs=failing_jobs)
         if not github.validate_comment_length(comment):
             comment = render_template('comment-short.md', build=build,
                                       app_domain=APP_DOMAIN, org_name=ORG_NAME,
                                       characters=github.max_comment_length,
                                       repo_name=REPO_NAME,
-                                      has_unstable=has_unstable)
+                                      has_unstable=has_unstable,
+                                      failing_jobs=failing_jobs)
         try:
             github.post_comment(pr.number, comment)
         except requests.RequestException as err:

@@ -3,6 +3,15 @@
 Started: {{ build.started_at }}
 Finished: {{ build.finished_at }}
 
+{% if failing_jobs|length %}
+<h2>Failing Jobs</h2>
+<ul>
+{% for job_name in failing_jobs %}
+<li>{{ job_name }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if has_unstable %}
 <h2>Unstable Results</h2>
   {% for job in build.jobs|sort(attribute='id') %}

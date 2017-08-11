@@ -16,6 +16,7 @@ import hashlib
 import hmac
 import json
 import re
+import shlex
 from urllib.parse import parse_qs
 
 from wptdash.commenter import update_github_comment
@@ -30,7 +31,7 @@ ORG = CONFIG.get('GitHub', 'ORG')
 REPO = CONFIG.get('GitHub', 'REPO')
 DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
-RE_PRODUCT = re.compile(r'PRODUCT=([\w:]+)')
+RE_ENV = re.compile(r'(\w+)=(.+)')
 RE_SAUCE = re.compile(r'^sauce:')
 
 bp = Blueprint('routes', __name__)
@@ -503,20 +504,31 @@ def add_stability_check():
 
 
 def normalize_product_name(product_name):
-    return RE_SAUCE.sub('', product_name)
+    return RE_SAUCE.sub('', product_name) if product_name else None
+
+
+def dictify_env_list(env_list):
+    env_dict = {}
+    for env_string in env_list:
+        env_vars = shlex.split(env_string)
+        for variable in env_vars:
+            match = RE_ENV.match(variable)
+            if match:
+                env_dict[match.group(1)] = match.group(2)
+    return env_dict
 
 
 def add_job_to_session(job_data, build, db, models):
-    product_env = next(
-        (x for x in job_data['config'].get('env', []) if 'PRODUCT=' in x),
-        None
-    )
-    product_name = normalize_product_name(RE_PRODUCT.search(
-        product_env
-    ).group(1)) if product_env else None
+    env_dict = dictify_env_list(job_data['config'].get('env', []))
+
+    product_name = normalize_product_name(env_dict.get('PRODUCT'))
+    job_name = env_dict.get('JOB')
+    python_version = env_dict.get('TOXENV')
 
     if not product_name:
-        return
+        product_name = job_name
+        if python_version:
+            product_name += ' in %s' % python_version
 
     product, _ = models.get_or_create(
         db.session, models.Product, name=product_name
@@ -528,13 +540,10 @@ def add_job_to_session(job_data, build, db, models):
     job.build = build
     job.product = product
 
-    state_string = None
     if job_data['status'] == 0:
         job.state = models.JobStatus.PASSED
-    elif job_data['state'] == 'finished':
-        job.state = models.JobStatus.FAILED
     else:
-        job.state = models.JobStatus.STARTED
+        job.state = models.JobStatus.FAILED
     job.allow_failure = job_data['allow_failure']
 
     if job_data['started_at']:

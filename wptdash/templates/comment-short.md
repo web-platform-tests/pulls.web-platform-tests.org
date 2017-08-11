@@ -5,6 +5,14 @@ Finished: {{ build.finished_at }}
 
 > This report has been truncated because the number of unstable tests exceeds GitHub.com's character limit for comments ({{characters}} characters).
 
+{% if failing_jobs|length %}
+<h2>Failing Jobs</h2>
+<ul>
+{% for job_name in failing_jobs %}
+<li>{{ job_name }}</li>
+{% endfor %}
+</ul>
+{% endif %}
 
 {% if has_unstable %}
 <h2>Unstable Browsers</h2>

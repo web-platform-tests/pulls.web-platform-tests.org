@@ -12,7 +12,7 @@ Finished: {{ build.finished_at }}
   {% set inconsistent_tests = job.tests|selectattr("consistent", "sameas", false)|list %}
   {% if inconsistent_tests|length %}
   <h3>Browser: "{{ job.product.name|replace(':', ' ')|title }}"<small>{{' (failures allowed)' if job.allow_failure else ''}}</small></h3>
-  <p>View in: <a href="http://{{app_domain}}/job/{{job.number}}">Dashboard</a> |
+  <p>View in: <a href="http://{{app_domain}}/job/{{job.number}}">WPT PR Status</a> |
       <a href="https://travis-ci.org/{{org_name}}/{{repo_name}}/jobs/{{job.id}}">TravisCI</a></p>
   {% endif %}
   {% endfor %}
@@ -20,7 +20,7 @@ Finished: {{ build.finished_at }}
 
 View more information about this build on:
 
-- [WPT Results Dashboard](http://{{app_domain}}/build/{{build.number}})
+- [WPT PR Status](http://{{app_domain}}/build/{{build.number}})
 - [TravisCI](https://travis-ci.org/{{org_name}}/{{repo_name}}/builds/{{build.id}})
 
 {% endif %}

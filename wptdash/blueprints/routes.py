@@ -98,8 +98,9 @@ def add_pull_request():
 
     pr = add_pr_to_session(data['pull_request'], db, models)
 
+    route_response = update_github_comment(pr)
     db.session.commit()
-    return update_github_comment(pr)
+    return route_response
 
 
 @bp.route('/api/build', methods=['POST'])
@@ -239,8 +240,9 @@ def add_build():
     for job_data in verified_payload['matrix']:
         add_job_to_session(job_data, build, db, models)
 
+    route_response = update_github_comment(pr)
     db.session.commit()
-    return update_github_comment(pr)
+    return route_response
 
 
 @bp.route('/api/test-mirror', methods=['POST', 'DELETE'])
@@ -284,8 +286,9 @@ def update_test_mirror():
     pr.mirror = pr.mirror or models.TestMirror()
     pr.mirror.url = data['url'] if request.method == 'POST' else None
 
+    route_response = update_github_comment(pr)
     db.session.commit()
-    return update_github_comment(pr)
+    return route_response
 
 
 @bp.route('/api/stability', methods=['POST'])
@@ -499,8 +502,9 @@ def add_stability_check():
                     subtest_result.consistent = False
                     test_result.consistent = False
 
+    route_response = update_github_comment(pr)
     db.session.commit()
-    return update_github_comment(pr)
+    return route_response
 
 
 def normalize_product_name(product_name):

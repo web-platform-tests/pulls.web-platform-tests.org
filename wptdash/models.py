@@ -290,6 +290,7 @@ class PullRequest(db.Model):
     merged_at = db.Column(db.TIMESTAMP())
     updated_at = db.Column(db.TIMESTAMP(), nullable=False)
     closed_at = db.Column(db.TIMESTAMP())
+    comment_url = db.Column(db.String)
 
     builds = db.relationship('Build', back_populates='pull_request')
     creator = db.relationship('GitHubUser', foreign_keys=[created_by],

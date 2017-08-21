@@ -18,6 +18,7 @@ REPO_NAME = CONFIG.get('GitHub', 'REPO')
 
 # TODO: make this return some useful JSON
 def update_github_comment(pr):
+    resp = None
     if pr.builds:
         github = GitHub()
         build = sorted(pr.builds, key=attrgetter('started_at'), reverse=True)[0]
@@ -45,9 +46,9 @@ def update_github_comment(pr):
                                       has_unstable=has_unstable,
                                       failing_jobs=failing_jobs)
         try:
-            github.post_comment(pr.number, comment)
+            resp = github.post_comment(pr.number, comment, pr.comment_url)
+            pr.comment_url = resp.json().get('url')
         except requests.RequestException as err:
             logging.error(err.response.text)
             return err.response.text, 500
-
     return 'OK', 200

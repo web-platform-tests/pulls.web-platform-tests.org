@@ -88,18 +88,11 @@ class GitHub(object):
         pr_url = urljoin(self.base_url, "pulls/%s" % issue_number)
         return self.get(pr_url).json()
 
-    def post_comment(self, issue_number, body):
-        """Create or update comment in pull request comment section."""
+    def post_comment(self, issue_number, body, comment_url=None):
+        data = {"body": body}
+        if comment_url:
+            return self.patch(comment_url, data)
+
         issue_comments_url = urljoin(self.base_url,
                                      "issues/%s/comments" % issue_number)
-        issue_comments = self.get(issue_comments_url).json()
-
-        data = {"body": body}
-
-        for issue_comment in issue_comments:
-            if issue_comment["user"]["login"] == GH_COMMENTER:
-                comment_url = urljoin(
-                    self.base_url, "issues/comments/%s" % issue_comment["id"]
-                )
-                return self.patch(comment_url, data)
         return self.post(issue_comments_url, data)

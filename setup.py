@@ -6,8 +6,8 @@ setup(
     packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
     install_requires=[
-        'flask', 'flask-sqlalchemy', 'jsonschema', 'pyOpenSSL', 'requests',
-        'requests-cache',
+        'flask', 'flask-sqlalchemy', 'flask-migrate', 'flask-script',
+        'jsonschema', 'pyOpenSSL', 'requests', 'requests-cache',
     ],
     setup_requires=[
         'pytest-runner',

@@ -55,3 +55,8 @@
   args:
     chdir: "{{base_path}}"
   when: keep_n_most_recent is defined
+
+- name: Ensure database is at latest migration
+  shell: "{{base_path}}/venv/bin/python manage.py db upgrade"
+  args:
+    chdir: "{{site_path}}"

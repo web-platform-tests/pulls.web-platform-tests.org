@@ -33,7 +33,8 @@ def run_migrations_offline():
 
     """
     url = config.get_main_option("sqlalchemy.url")
-    context.configure(url=url)
+    context.configure(compare_type=True,
+                      url=url)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -62,7 +63,8 @@ def run_migrations_online():
                                 poolclass=pool.NullPool)
 
     connection = engine.connect()
-    context.configure(connection=connection,
+    context.configure(compare_type=True,
+                      connection=connection,
                       target_metadata=target_metadata,
                       process_revision_directives=process_revision_directives,
                       **current_app.extensions['migrate'].configure_args)

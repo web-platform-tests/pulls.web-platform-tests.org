@@ -203,7 +203,7 @@ class Job(db.Model):
     __tablename__ = 'job'
 
     id = db.Column(db.Integer, primary_key=True)
-    number = db.Column(db.Float)
+    number = db.Column(db.String)
     build_id = db.Column(db.Integer, db.ForeignKey('build.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'),
                            nullable=False)

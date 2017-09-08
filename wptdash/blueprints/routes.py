@@ -540,7 +540,7 @@ def add_job_to_session(job_data, build, db, models):
     job, _ = models.get_or_create(
         db.session, models.Job, id=job_data['id']
     )
-    job.number = float(job_data['number'])
+    job.number = job_data['number']
     job.build = build
     job.product = product
 

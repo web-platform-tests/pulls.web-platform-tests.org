@@ -1,0 +1,86 @@
+{% set pr_status_classes = {
+    'OPEN': 'active',
+    'CLOSED': '',
+} %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Platform Tests PR Status</title>
+    <link rel=stylesheet href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+  </head>
+  <body class="container">
+    <div class="page-header">
+      <h1>Pulls Dashboard Performance Metrics</h1>
+    </div>
+    <form action="{{ url_for('routes.performance_metrics') }}" method="get">
+      <fieldset>
+        <p>
+          <label for="start">Start Date</label>
+          <input type="date" id="start" name="start" class="wpt-datepicker"
+          value="{{ start if start else '' }}">
+
+          <label for="end">End Date</label>
+          <input type="date" id="end" name="end" class="wpt-datepicker"
+          value="{{ end if end else ''}}">
+
+          <input type="submit">
+        </p>
+      </fieldset>
+    </form>
+    {% if not jobs|length %}
+      <p>No results for this time frame.</p>
+    {% else %}
+      {% set okr_minutes = okr_delta.total_seconds() / 60 %}
+      <p>Percentage of Jobs completed in under {{ okr_minutes }} minutes: <strong>{{ total_okr }}</strong></p>
+      <h2>All Jobs</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Pull Request</th>
+            <th>Created at</th>
+            <th>Job</th>
+            <th>Job Finished at</th>
+            <th>Job Duration</th>
+            <th>Job Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobs %}
+            {% set job_finished_at = job.finished_at or job.build.finished_at %}
+            {% set job_delta = job_finished_at - job.build.pull_request.created_at %}
+            <tr>
+              <td>{{ job.build.pull_request.number }}</td>
+              <td>{{ job.build.pull_request.created_at }}</a></td>
+              <td>{{ job.product.name|replace(':', ' ')|title }}</td>
+              <td>{{ job_finished_at }}</td>
+              <td>{{ job_delta }}</td>
+              <td>{{ job.state.name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script>
+      (function() {
+        var elem = document.createElement('input');
+        elem.setAttribute('type', 'date');
+
+        if (elem.type === 'text') {
+          $('.wpt-datepicker').datepicker({
+            dateFormat: 'yy-mm-dd'
+          });
+          // $('#start').datepicker('setDate', {{start}});
+          // $('#end').datepicker('setDate', {{end}});
+        }
+      }());
+    </script>
+  </body>
+</html>

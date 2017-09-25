@@ -10,12 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Web Platform Tests PR Status</title>
     <link rel=stylesheet href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
   </head>
   <body class="container">
     <div class="page-header">
-      <h1>Pulls Dashboard Performance Metrics</h1>
+      <h1>Pull Request CI Performance Metrics</h1>
     </div>
     <form action="{{ url_for('routes.performance_metrics') }}" method="get">
       <fieldset>
@@ -35,52 +34,142 @@
     {% if not jobs|length %}
       <p>No results for this time frame.</p>
     {% else %}
-      {% set okr_minutes = okr_delta.total_seconds() / 60 %}
-      <p>Percentage of Jobs completed in under {{ okr_minutes }} minutes: <strong>{{ total_okr }}</strong></p>
-      <h2>All Jobs</h2>
+      <h2>Overall Statistics (minutes)</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Min</th>
+            <th>Median</th>
+            <th>Mean</th>
+            <th>Max</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Wait Time</td>
+            <td>{{ '%.2f' | format(statistics['wait_min']) }}</td>
+            <td>{{ '%.2f' | format(statistics['wait_median']) }}</td>
+            <td>{{ '%.2f' | format(statistics['wait_mean']) }}</td>
+            <td>{{ '%.2f' | format(statistics['wait_max']) }}</td>
+          </tr>
+          <tr>
+            <td>Build Time</td>
+            <td>{{ '%.2f' | format(statistics['build_min']) }}</td>
+            <td>{{ '%.2f' | format(statistics['build_median']) }}</td>
+            <td>{{ '%.2f' | format(statistics['build_mean']) }}</td>
+            <td>{{ '%.2f' | format(statistics['build_max']) }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>Percentage of Jobs completed within a given duration</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Duration</th>
+            <th>Jobs completed</th>
+            <th>Completion Chart</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5 minutes</td>
+            <td>{{ jobs_by_delta[5]|int }}%</td>
+            <td rowspan="8">
+              <p><small>Cumulative % of Jobs completed in <code>x</code> minutes</small></p>
+              <svg id="cumulative-chart" width="500", height="250"></svg>
+            </td>
+          </tr>
+          <tr>
+            <td>15 minutes</td>
+            <td>{{ jobs_by_delta[15]|int }}%</td>
+          </tr>
+          <tr>
+            <td>30 minutes</td>
+            <td>{{ jobs_by_delta[30]|int }}%</td>
+          </tr>
+          <tr>
+            <td>1 hour</td>
+            <td>{{ jobs_by_delta[60]|int }}%</td>
+          </tr>
+          <tr>
+            <td>2 hours</td>
+            <td>{{ jobs_by_delta[120]|int }}%</td>
+          </tr>
+          <tr>
+            <td>4 hours</td>
+            <td>{{ jobs_by_delta[240]|int }}%</td>
+          </tr>
+          <tr>
+            <td>24 hours</td>
+            <td>{{ jobs_by_delta[1440]|int }}%</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>Distribution of Wait and Build Times</h2>
+      <svg id="wait-times" height="250" width="400"></svg>
+      <svg id="build-times" height="250" width="400"></svg>
+      <h2>PRs taking over 1 hour</h2>
       <table class="table">
         <thead>
           <tr>
             <th>Pull Request</th>
-            <th>Created at</th>
+            <th>Title</th>
+            <th>Total Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pr in outlier_prs %}
+            <tr>
+              <td>{{ pr['number'] }}</td>
+              <td><a href="https://github.com/w3c/web-platform-tests/pull/{{pr['number']}}">{{ pr['title'] }}</a></td>
+              <td>{{ pr['time'] }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <h2>All First-Completed Jobs for each PR</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Pull Request</th>
             <th>Job</th>
-            <th>Job Finished at</th>
+            <th>Build Wait Time</th>
             <th>Job Duration</th>
+            <th>Total Time</th>
             <th>Job Status</th>
           </tr>
         </thead>
         <tbody>
           {% for job in jobs %}
-            {% set job_finished_at = job.finished_at or job.build.finished_at %}
-            {% set job_delta = job_finished_at - job.build.pull_request.created_at %}
+            {% set job_finished_at = job.finished_at or job.build.finished_at or now %}
+            {% set build_wait = (job.build.started_at or job.build.pull_request.created_at) - job.build.pull_request.created_at %}
+            {% set total_time = job_finished_at - job.build.pull_request.created_at %}
+            {% set job_delta = total_time - build_wait %}
             <tr>
               <td>{{ job.build.pull_request.number }}</td>
-              <td>{{ job.build.pull_request.created_at }}</a></td>
               <td>{{ job.product.name|replace(':', ' ')|title }}</td>
-              <td>{{ job_finished_at }}</td>
+              <td>{{ build_wait }}</td>
               <td>{{ job_delta }}</td>
+              <td>{{ total_time }}</td>
               <td>{{ job.state.name }}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     {% endif %}
-    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    {% autoescape false %}
     <script>
-      (function() {
-        var elem = document.createElement('input');
-        elem.setAttribute('type', 'date');
-
-        if (elem.type === 'text') {
-          $('.wpt-datepicker').datepicker({
-            dateFormat: 'yy-mm-dd'
-          });
-          // $('#start').datepicker('setDate', {{start}});
-          // $('#end').datepicker('setDate', {{end}});
-        }
-      }());
+      window.WPTDASH = {
+        cumulativeData: '{{ cumulative_chart_data }}',
+        buildTimes: '{{ build_times }}',
+        waitTimes: '{{ wait_times }}'
+      };
     </script>
+    {% endautoescape %}
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
   </body>
 </html>

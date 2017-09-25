@@ -8,21 +8,23 @@
     a single GitHub comment and provides an interface for displaying
     more detailed forms of that information.
 """
+from collections import defaultdict
 import configparser
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from flask import Blueprint, g, render_template, request
 from jsonschema import validate
-from sqlalchemy import or_
 import hashlib
 import hmac
 import json
-import math
 import re
 import shlex
-from urllib.parse import parse_qs
 
 from wptdash.commenter import update_github_comment
+from wptdash.date import get_default_start_end
 from wptdash.github import GitHub
+from wptdash.metrics import (get_jobs_for_metrics, get_jobs_by_delta,
+                             get_cumulative_chart_data, get_histogram_data,
+                             get_outlier_prs, get_statistics)
 from wptdash.travis import Travis
 
 CONFIG = configparser.ConfigParser()
@@ -77,75 +79,26 @@ def job_detail(job_number):
 
 @bp.route('/performance')
 def performance_metrics():
-
-    def get_quarter_start_date(quarter, year):
-        quarter_first_month = quarter * 3 - 2
-        quarter_start = date(year, quarter_first_month, 1)
-        return quarter_start
-
-    def get_default_start_end():
-        month_end_days = {
-            3: 31,
-            6: 30,
-            9: 30,
-            12: 31
-        }
-        today = date.today()
-        month = today.month
-        year = today.year
-        quarter = math.ceil(month / 3)
-        quarter_start = get_quarter_start_date(quarter, year)
-        delta = today - quarter_start
-        if delta.days < 45:
-            quarter -= 1
-            if quarter == 0:
-                quarter = 4
-                year -= 1
-            quarter_start = get_quarter_start_date(quarter, year)
-        quarter_end_month = quarter_start.month + 2
-        quarter_end = date(year, quarter_end_month,
-                           month_end_days[quarter_end_month])
-        return quarter_start, quarter_end
-
     db = g.db
     models = g.models
     (default_start, default_end) = get_default_start_end()
     start_date = request.args.get('start') or default_start
     end_date = request.args.get('end') or default_end
-    okr_delta = timedelta(minutes=30)
-    total_okr = 0
 
-    jobs = db.session.query(models.Job).filter(
-        models.Job.product_id == models.Product.id
-    ).filter(
-        models.Job.build_id == models.Build.id
-    ).filter(
-        models.Build.pull_request_id == models.PullRequest.id
-    ).filter(
-        or_(models.Product.name.ilike('%firefox%'),
-            models.Product.name.ilike('%chrome%'),
-            models.Product.name.ilike('%safari%'),
-            models.Product.name.ilike('%microsoft%'))
-    ).filter(models.PullRequest.created_at >= datetime.strptime(
-        '%sT00:00:00Z' % start_date, DATETIME_FORMAT
-    ), models.PullRequest.created_at < datetime.strptime(
-        '%sT00:00:00Z' % end_date, DATETIME_FORMAT
-    )).order_by(
-        models.PullRequest.created_at.asc()
-    ).all()
-
-    for job in jobs:
-        job_finished_at = job.finished_at or job.build.finished_at
-        job_delta = job_finished_at - job.build.pull_request.created_at
-        job_okr = job_delta <= okr_delta and job.state.name in [
-            'PASSED', 'FAILED', 'FINISHED'
-        ]
-        total_okr += 1.0 if job_okr else 0.0
-    total_okr = total_okr / len(jobs)
+    jobs = get_jobs_for_metrics(db, models, start_date, end_date)
+    wait_times, build_times = get_histogram_data(jobs)
+    statistics = get_statistics(wait_times, build_times)
 
     return render_template('performance.html', jobs=jobs,
                            start=start_date, end=end_date,
-                           okr_delta=okr_delta, total_okr=total_okr)
+                           jobs_by_delta=get_jobs_by_delta(jobs),
+                           now=datetime.utcnow(),
+                           cumulative_chart_data=json.dumps(
+                               get_cumulative_chart_data(jobs)
+                           ), wait_times=json.dumps(wait_times),
+                           build_times=json.dumps(build_times),
+                           outlier_prs=get_outlier_prs(jobs),
+                           statistics=statistics)
 
 
 @bp.route('/api/pull', methods=['POST'])

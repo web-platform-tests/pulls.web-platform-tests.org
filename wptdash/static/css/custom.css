@@ -14,3 +14,12 @@ summary::before {
 details[open] > summary::before {
   content: '\25BC';
 }
+
+.bar rect {
+  fill: steelblue;
+}
+
+.bar text {
+  fill: #fff;
+  font: 10px sans-serif;
+}

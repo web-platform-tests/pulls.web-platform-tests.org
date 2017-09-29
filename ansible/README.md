@@ -1,4 +1,4 @@
-# Deplying the PR Results Consolidator
+# Deploying the PR Results Consolidator
 The deployment process uses [Ansible](http://docs.ansible.com/) to configure
 the server to use [nginx](http://nginx.org/) and
 [uWSGI](http://uwsgi-docs.readthedocs.io/en/latest/) to serve a

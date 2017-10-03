@@ -65,7 +65,7 @@ more details.
 1. Decide on a secret key that will be shared between the webhook settings and
    the application.
    - `ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'`
-2. Add or edit a webhook at https://github.com/s3c/web-platform-tests/settings/hooks/.
+2. Add or edit a webhook at https://github.com/w3c/web-platform-tests/settings/hooks/.
   - Payload URL: http://pulls-staging.web-platform-tests.org/api/pull
   - Content type: application/json
   - Secret: the secret key from Step 2

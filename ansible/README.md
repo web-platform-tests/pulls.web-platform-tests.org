@@ -27,12 +27,12 @@ following:
    `sudo`-ing on the staging and production servers.
    - `openssl passwd -1 -salt $(openssl rand -base64 6) yourpassword`
 3) Add yourself to the list of users in [ansible/group_vars/all/vars.yml](ansible/group_vars/all/vars.yml). You must include:
-  a) name: Your username for the server. You will use this to SSH into the server instance.
-  b) state: present
-  c) real_name: Your real name
-  d) groups: sudo,www-data
-  e) shadow_pass: The encrypted password you generated in Step 2.
-  f) public_keys: A list of (probably 1) public keys for logging into the
+  - a) name: Your username for the server. You will use this to SSH into the server instance.
+  - b) state: present
+  - c) real_name: Your real name
+  - d) groups: sudo,www-data
+  - e) shadow_pass: The encrypted password you generated in Step 2.
+  - f) public_keys: A list of (probably 1) public keys for logging into the
   server. This is more convenient for you if it is your `id_rsa.pub`, but
   you can use a separate keypair if you prefer.
 4) Open a PR with these changes.

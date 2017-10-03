@@ -1,7 +1,7 @@
 (function() {
 
   function drawCumulativeChart() {
-    var line_data = JSON.parse(window.WPTDASH.cumulativeData);
+    var line_data = window.WPTDASH.cumulativeData;
 
     var pctMultiplier = 100 / d3.max(line_data, function(d) { return d.sum; });
 
@@ -92,14 +92,14 @@
   function drawBuildTimeHistogram() {
     drawHistogram(
       d3.select('#build-times'),
-      JSON.parse(window.WPTDASH.buildTimes)
+      window.WPTDASH.buildTimes
     );
   }
 
   function drawWaitTimeHistogram() {
     drawHistogram(
       d3.select('#wait-times'),
-      JSON.parse(window.WPTDASH.waitTimes)
+      window.WPTDASH.waitTimes
     );
   }
 

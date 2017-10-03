@@ -21,9 +21,11 @@ def get_default_start_end():
     today = date.today()
     month = today.month
     year = today.year
-    quarter = math.ceil(month / 3)
+    quarter = math.ceil(month / 3.0)
     quarter_start = get_quarter_start_date(quarter, year)
     delta = today - quarter_start
+    # If this is before the midpoint of the quarter, show the previous quarter
+    # by default.
     if delta.days < 45:
         quarter -= 1
         if quarter == 0:

@@ -161,9 +161,9 @@
     {% autoescape false %}
     <script>
       window.WPTDASH = {
-        cumulativeData: '{{ cumulative_chart_data }}',
-        buildTimes: '{{ build_times }}',
-        waitTimes: '{{ wait_times }}'
+        cumulativeData: {{ cumulative_chart_data }},
+        buildTimes: {{ build_times }},
+        waitTimes: {{ wait_times }}
       };
     </script>
     {% endautoescape %}

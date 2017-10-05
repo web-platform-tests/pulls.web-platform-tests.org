@@ -82,7 +82,7 @@ Examples:
 Useful flags:
 
 - `commit=branch/tag/sha`: The specific branch, tag or SHA (pushed to
-  the repo) you would like to deploy.
+  the repo) you would like to deploy. If omitted, defaults to master.
 - `--private-key=~/.ssh/key_name`: if you used something other than your
   default `id_rsa.pub` public key when setting up your user.
 - `--force=true`: Regardless of the prior deploy state of the commit, reclone

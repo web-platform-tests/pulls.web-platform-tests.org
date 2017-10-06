@@ -3,6 +3,14 @@
 # build regardless of prior status. When done, symlink the specified commit
 # to make it go live, and remove old clones to free up disk space.
 
+- name: ensure base path exists and belongs to www-data
+  file:
+    path: "{{base_path }}"
+    state: directory
+    group: www-data
+    owner: www-data
+    recurse: yes
+
 - name: check if specified commit has already been deployed
   stat: path={{base_path}}/{{commit}} get_checksum=no get_md5=no
   register: commit_dir

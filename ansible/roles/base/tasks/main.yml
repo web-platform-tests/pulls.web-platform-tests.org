@@ -2,14 +2,6 @@
 # or the project is cloned or built. All system dependencies should be
 # installed here.
 
-- name: ensure base path exists and belongs to www-data
-  file:
-    path: "{{base_path }}"
-    state: directory
-    group: www-data
-    owner: www-data
-    recurse: yes
-
 - name: Update apt/aptitude
   apt:
     name: aptitude

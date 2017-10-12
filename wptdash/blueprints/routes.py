@@ -52,7 +52,8 @@ def pull_detail(pull_number):
     db = g.db
     models = g.models
     pull = models.get(db.session, models.PullRequest, number=pull_number)
-    return render_template('pull.html', pull=pull, pull_number=pull_number)
+    return render_template('pull.html', pull=pull, pull_number=pull_number,
+                           org_name=ORG, repo_name=REPO)
 
 
 @bp.route('/build/<int:build_number>')

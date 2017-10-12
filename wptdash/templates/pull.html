@@ -29,13 +29,13 @@
     {% if not pull %}
       <p>
         No information to display for Pull Request {{pull_number}}. Try checking
-        <a href="https://github.com/w3c/web-platform-tests/pull/{{pull_number}}">
+        <a href="https://github.com/{{org_name}}/{{repo_name}}/pull/{{pull_number}}">
           GitHub
         </a>
       </p>
     {% else %}
       <p>
-        <a href="https://github.com/w3c/web-platform-tests/pull/{{pull_number}}">
+        <a href="https://github.com/{{org_name}}/{{repo_name}}/pull/{{pull_number}}">
           View PR on GitHub
         </a>
       </p>

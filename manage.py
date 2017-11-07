@@ -12,6 +12,8 @@ WPTDASH_DB_USER = CONFIG.get('postgresql', 'WPTDASH_DB_USER')
 WPTDASH_DB_PASS = CONFIG.get('postgresql', 'WPTDASH_DB_PASS')
 WPTDASH_DB_HOST = CONFIG.get('postgresql', 'WPTDASH_DB_HOST')
 
+# This is here to not-break existing installations
+
 if WPTDASH_DB_HOST == "":
     WPTDASH_DB_HOST = "localhost"
 

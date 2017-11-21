@@ -97,16 +97,3 @@ config.txt
 # Vagrant
 .vagrant
 
-# Mac Finder
-.DS_Store
-
-# mattl uses Emacs
-
-*~
-\#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
-*.elc
-auto-save-list
-tramp
-.\#*

@@ -8,8 +8,9 @@
     a single GitHub comment and provides an interface for displaying
     more detailed forms of that information.
 """
+from collections import defaultdict
 import configparser
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Blueprint, g, render_template, request
 from jsonschema import validate
 import hashlib
@@ -17,10 +18,13 @@ import hmac
 import json
 import re
 import shlex
-from urllib.parse import parse_qs
 
 from wptdash.commenter import update_github_comment
+from wptdash.date import get_default_start_end
 from wptdash.github import GitHub
+from wptdash.metrics import (get_jobs_for_metrics, get_jobs_by_delta,
+                             get_cumulative_chart_data, get_histogram_data,
+                             get_outlier_prs, get_statistics)
 from wptdash.travis import Travis
 
 CONFIG = configparser.ConfigParser()
@@ -72,6 +76,30 @@ def job_detail(job_number):
     job = models.get(db.session, models.Job, number=job_number)
     return render_template('job.html', job=job, job_number=job_number,
                            org_name=ORG, repo_name=REPO)
+
+
+@bp.route('/performance')
+def performance_metrics():
+    db = g.db
+    models = g.models
+    (default_start, default_end) = get_default_start_end()
+    start_date = request.args.get('start') or default_start
+    end_date = request.args.get('end') or default_end
+
+    jobs = get_jobs_for_metrics(db, models, start_date, end_date)
+    wait_times, build_times = get_histogram_data(jobs)
+    statistics = get_statistics(wait_times, build_times)
+
+    return render_template('performance.html', jobs=jobs,
+                           start=start_date, end=end_date,
+                           jobs_by_delta=get_jobs_by_delta(jobs),
+                           now=datetime.utcnow(),
+                           cumulative_chart_data=json.dumps(
+                               get_cumulative_chart_data(jobs)
+                           ), wait_times=json.dumps(wait_times),
+                           build_times=json.dumps(build_times),
+                           outlier_prs=get_outlier_prs(jobs),
+                           statistics=statistics)
 
 
 @bp.route('/api/pull', methods=['POST'])

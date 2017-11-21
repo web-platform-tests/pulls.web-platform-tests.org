@@ -10,8 +10,16 @@ CONFIG.readfp(open(r'config.txt'))
 WPTDASH_DB = CONFIG.get('postgresql', 'WPTDASH_DB')
 WPTDASH_DB_USER = CONFIG.get('postgresql', 'WPTDASH_DB_USER')
 WPTDASH_DB_PASS = CONFIG.get('postgresql', 'WPTDASH_DB_PASS')
-WPTDASH_DB_URI = 'postgresql://%s:%s@localhost/%s' % (WPTDASH_DB_USER,
+WPTDASH_DB_HOST = CONFIG.get('postgresql', 'WPTDASH_DB_HOST')
+
+# This is here to not-break existing installations
+
+if WPTDASH_DB_HOST == "":
+    WPTDASH_DB_HOST = "localhost"
+
+WPTDASH_DB_URI = 'postgresql://%s:%s@%s/%s' % (WPTDASH_DB_USER,
                                                       WPTDASH_DB_PASS,
+                                                      WPTDASH_DB_HOST,
                                                       WPTDASH_DB)
 
 app = Flask(__name__)

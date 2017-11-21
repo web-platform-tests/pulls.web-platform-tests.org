@@ -97,5 +97,3 @@ config.txt
 # Vagrant
 .vagrant
 
-# Mac Finder
-.DS_Store

@@ -179,8 +179,8 @@ def add_build():
                         'number': {'type': 'string'},
                         'state': {
                             'type': 'string',
-                            'enum': ['created', 'queued', 'started', 'passed',
-                                     'failed', 'errored', 'finished']
+                            'enum': ['received', 'created', 'queued', 'started',
+                                     'passed', 'failed', 'errored', 'finished']
                         },
                         'started_at': {'oneOf': [
                             {'$ref': '#/definitions/date_time'},
@@ -343,8 +343,8 @@ def add_stability_check():
                     'allow_failure': {'type': 'boolean'},
                     'status': {
                         'type': 'string',
-                        'enum': ['created', 'queued', 'started', 'passed',
-                                 'failed', 'errored', 'finished']
+                        'enum': ['received', 'created', 'queued', 'started',
+                                 'passed', 'failed', 'errored', 'finished']
                     },
                 },
                 'required': [

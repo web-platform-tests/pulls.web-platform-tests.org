@@ -3,9 +3,9 @@ from flask import Flask
 from wptdash.database import db
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-import wptdash.models as models
 
-CONFIG = configparser.ConfigParser()
+DEFAULTS = { 'WPTDASH_DB_HOST': 'localhost' }
+CONFIG = configparser.ConfigParser(defaults=DEFAULTS)
 CONFIG.readfp(open(r'config.txt'))
 WPTDASH_DB = CONFIG.get('postgresql', 'WPTDASH_DB')
 WPTDASH_DB_USER = CONFIG.get('postgresql', 'WPTDASH_DB_USER')
@@ -18,9 +18,9 @@ if WPTDASH_DB_HOST == "":
     WPTDASH_DB_HOST = "localhost"
 
 WPTDASH_DB_URI = 'postgresql://%s:%s@%s/%s' % (WPTDASH_DB_USER,
-                                                      WPTDASH_DB_PASS,
-                                                      WPTDASH_DB_HOST,
-                                                      WPTDASH_DB)
+                                               WPTDASH_DB_PASS,
+                                               WPTDASH_DB_HOST,
+                                               WPTDASH_DB)
 
 app = Flask(__name__)
 app.config.update(dict(

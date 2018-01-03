@@ -26,7 +26,7 @@ following:
 2) Generate an encrypted version of the password you would like to use when
    `sudo`-ing on the staging and production servers.
    - `openssl passwd -1 -salt $(openssl rand -base64 6) yourpassword`
-3) Add yourself to the list of users in [ansible/group_vars/all/vars.yml](ansible/group_vars/all/vars.yml). You must include:
+3) Add yourself to the list of users in [ansible/group_vars/all/vars.yml](/ansible/group_vars/all/vars.yml). You must include:
   - a) name: Your username for the server. You will use this to SSH into the server instance.
   - b) state: present
   - c) real_name: Your real name

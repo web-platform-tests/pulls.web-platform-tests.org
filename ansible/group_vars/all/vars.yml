@@ -150,6 +150,13 @@ users:
     shadow_pass: $1$opR6AvEl$E2pQJH78DSFDCpcieNZuG.
     public_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrxk7Y0JdC58bgfWA7PaAtbStCz9Ttv9pct2a/7ZgyiT1ivtXcEKnoM/VVNWcRiVEk3Q1DZmQALzyzf+S4yZiIeecubH9rv5PfVTZIKV8I1g7PQ8eftG2+48TgBNXwRtHZyhputD5aQTGynGjoIXl7NR6D1np+cGDbxzyD03rS58dijZjxwjH7va+2NRj9dZdLVKO7nAoTLQiPPsh3ybZzuwoQPtTNADfZ/TxX6Cr1i8pshiMR0YTcvCRFBoGnBUq9+m8gTgw+q4VLbPublK+AkeWLsZWHwbqe6n0ozAGfzqvBKTgKbsFOlZmLd5/mJd9JbN/IXVP7QfrVcoQ85VlV lukebjerring
+  - name: boazsender
+    state: present
+    real_name: Boaz Sender
+    groups: sudo,www-data
+    shadow_pass: $1$xavxSHgQ$RmbUWT2h.A1O2DsERiqb9/
+    public_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDUaxbaJJekt7yXzGqJeLnluNmuL/wAcU80UNgb5HfZomwInzL+cMKSSZ/I4tdyBE7q/ldz/lHzCIRFLPjuCWGDCyH0r2ZrP0HhL/WJYbi1iFkEN8+vce+4Hg9zgDGP/y6ytl8zO1EshHHL6Ezori9KNl8haiWi1vjDSnK8zzxQwAXDuOcitotzaFn7OPLe4ckeGxgPSAQ2NTvAQKUuWVv/8YW2UtyTIi5nXl/DjEF+xT8YxGyk5qQxZrzOux73o+4wmTZKGGlUYjEb8PJwq2a+n1U2JVmhjQlmQJJ55u6mtcSqTadsKVIOiYIogL75Xv6U8s9Ikfeb27i3mSltLTedHfWij6wfHxQ/FunHc9ewRjiZ+VUMvRVzEUGcDVylQQbLpSgWCd16lQN4mOebKgAxVboBImjHsJFbgd+d7YMn0zGUB+g1hIXCVlIap+02StKIlfKzT3xNTNmrQq5/qokFyYH18HUDAMMh5ZyOL6J+BKZ1aForqfFIH8mPN1O2fNElct7xDCLeafVA60EqHPXBNkyl8HYSvIC8bpu9cEuYNbZvp+zHfB571tsuWc5NW3P/z+RMYlSfqd3ez3gQBM+yR3rXl9M9/WqUlZQ0L/DCs2M8iM8Fkp9b+G/NhYl24cgJzofc0tG24Wpzg30hmPCahxwOTYQ4lnZEqsQEOSL3Rw== boaz@bocoup.com
 ########
 # DEPLOY
 ########

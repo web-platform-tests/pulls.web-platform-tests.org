@@ -5,7 +5,7 @@
 socket          = /tmp/{{project_name}}.sock
 chdir           = {{site_path}}
 master          = true
-module          = {{project_name}}.prodapp:prod_app
+module          = wptdash.prodapp:prod_app
 processes       = 1
 logger          = file:{{site_path}}/logs/uwsgi.log
 vacuum          = true

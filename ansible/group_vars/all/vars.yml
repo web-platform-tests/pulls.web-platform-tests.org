@@ -158,6 +158,14 @@ users:
     shadow_pass: $1$xavxSHgQ$RmbUWT2h.A1O2DsERiqb9/
     public_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDUaxbaJJekt7yXzGqJeLnluNmuL/wAcU80UNgb5HfZomwInzL+cMKSSZ/I4tdyBE7q/ldz/lHzCIRFLPjuCWGDCyH0r2ZrP0HhL/WJYbi1iFkEN8+vce+4Hg9zgDGP/y6ytl8zO1EshHHL6Ezori9KNl8haiWi1vjDSnK8zzxQwAXDuOcitotzaFn7OPLe4ckeGxgPSAQ2NTvAQKUuWVv/8YW2UtyTIi5nXl/DjEF+xT8YxGyk5qQxZrzOux73o+4wmTZKGGlUYjEb8PJwq2a+n1U2JVmhjQlmQJJ55u6mtcSqTadsKVIOiYIogL75Xv6U8s9Ikfeb27i3mSltLTedHfWij6wfHxQ/FunHc9ewRjiZ+VUMvRVzEUGcDVylQQbLpSgWCd16lQN4mOebKgAxVboBImjHsJFbgd+d7YMn0zGUB+g1hIXCVlIap+02StKIlfKzT3xNTNmrQq5/qokFyYH18HUDAMMh5ZyOL6J+BKZ1aForqfFIH8mPN1O2fNElct7xDCLeafVA60EqHPXBNkyl8HYSvIC8bpu9cEuYNbZvp+zHfB571tsuWc5NW3P/z+RMYlSfqd3ez3gQBM+yR3rXl9M9/WqUlZQ0L/DCs2M8iM8Fkp9b+G/NhYl24cgJzofc0tG24Wpzg30hmPCahxwOTYQ4lnZEqsQEOSL3Rw== boaz@bocoup.com
+  - name: jugglinmike
+    state: present
+    real_name: Mike Pennisi
+    groups: sudo,www-data
+    shadow_pass:  $1$BpWQ+hY+$v2sj08hfOSkQKu2s0A1pG.
+    public_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5tFmLCohqcrIZCfVr1VUhYBUBEILYHfgcMpTFHJIgmLGIqv7NMh2UfGV52vd7gsYL+bxfwwBrP6hT2t9v0xkfcKHqmIrFbKsgOIVn0SwrgcwHNBQixlXjLqH38xF5SWrxDJelNZZuFMmb6gih8d7H7/5xsUzQdQ84D37tZO8IQez7CaxNm3jS8d4eXBBNS7fh0Uqi+6i5PuMNK9gVLyHVClRSr+xY63MW+v+yvWf9Zlz4uuYoKmCdxFU6rjBwjrqQfeynWV7ThWPIW4XIlPPGeTfA9Gy5dxWcSTguaoTrQaO38bL30OFJR5wSNwrNYwbyndQoigT1Q9vymHiI0rqEQ== mike@mikepennisi.com
+
 ########
 # DEPLOY
 ########

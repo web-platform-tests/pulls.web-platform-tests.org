@@ -1,0 +1,208 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Job 26980.5 details</title>
+    <link rel=stylesheet href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/custom.css">
+  </head>
+  <body class="container">
+    <div class="page-header">
+      <h1>
+        Job 26980.5
+        
+          <small>
+            for build
+            <a href="../build/26980.html">26980</a>
+            in pull request
+            <a href="../pull/10340.html">10340</a>
+          </small>
+        
+      </h1>
+      
+        <h2>
+          Chrome Dev
+        </h2>
+        <p><a href="https://travis-ci.org/w3c/web-platform-tests/jobs/362951769">View on TravisCI</a></p>
+      
+    </div>
+
+    
+      <dl>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Status</dt>
+            <dd class="label label-success">PASSED</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Started</dt>
+            <dd>None</dd>
+          </div>
+          <div class="col-xs-4">
+            
+          </div>
+        </div>
+      </dl>
+
+      
+      
+        
+        <h3>All Results</h3>
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            <details>
+              <summary><code>/service-workers/service-worker/worker-interception-redirect.https.html</code></summary>
+              
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Subtest</th>
+                      <th>Results</th>
+                      <th>Messages</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                      
+                        <tr>
+                          <td><code>cleanup global state</code></td>
+                          <td>
+                            
+                              PASS: 10<br />
+                            
+                          </td>
+                          <td>
+                            
+                              
+                              
+                            
+                          </td>
+                        </tr>
+                      
+                    
+                      
+                        <tr>
+                          <td><code>initialize global state</code></td>
+                          <td>
+                            
+                              PASS: 10<br />
+                            
+                          </td>
+                          <td>
+                            
+                              
+                              
+                            
+                          </td>
+                        </tr>
+                      
+                    
+                      
+                        <tr>
+                          <td><code>request to sw1 scope gets network redirect to out-of-scope</code></td>
+                          <td>
+                            
+                              FAIL: 10<br />
+                            
+                          </td>
+                          <td>
+                            
+                              
+                              
+                                
+                                  <code>assert_equals: expected &#34;fetched: sw1 saw the fetch from the worker&#34; but got &#34;fetched: a simple text file\n&#34;</code><br />
+                                
+                              
+                            
+                          </td>
+                        </tr>
+                      
+                    
+                      
+                        <tr>
+                          <td><code>request to sw1 scope gets network redirect to sw2 scope</code></td>
+                          <td>
+                            
+                              FAIL: 10<br />
+                            
+                          </td>
+                          <td>
+                            
+                              
+                              
+                                
+                                  <code>assert_equals: expected &#34;the shared worker script was served from network&#34; but got &#34;sw2 saw the request for the worker script&#34;</code><br />
+                                
+                              
+                            
+                          </td>
+                        </tr>
+                      
+                    
+                      
+                        <tr>
+                          <td><code>request to sw1 scope gets service-worker redirect to out-of-scope</code></td>
+                          <td>
+                            
+                              FAIL: 10<br />
+                            
+                          </td>
+                          <td>
+                            
+                              
+                              
+                                
+                                  <code>assert_equals: expected &#34;fetched: sw1 saw the fetch from the worker&#34; but got &#34;fetched: a simple text file\n&#34;</code><br />
+                                
+                              
+                            
+                          </td>
+                        </tr>
+                      
+                    
+                      
+                        <tr>
+                          <td><code>request to sw1 scope gets service-worker redirect to sw2 scope</code></td>
+                          <td>
+                            
+                              PASS: 10<br />
+                            
+                          </td>
+                          <td>
+                            
+                              
+                              
+                            
+                          </td>
+                        </tr>
+                      
+                    
+                      
+                    
+                  </tbody>
+                </table>
+              
+            </details>
+          
+        
+      
+    
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pull Request 10489 details</title>
+    <link rel=stylesheet href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/custom.css">
+  </head>
+  <body class="container">
+    <div class="page-header">
+      <h1>
+        Pull Request 10489:
+          <small>[Gecko Bug 1453702] css-display] Move unboxing to style, and handle display: contents before other suppressions.</small>
+        </h1>
+    </div>
+
+    
+      <p>
+        <a href="https://github.com/w3c/web-platform-tests/pull/10489">
+          View PR on GitHub
+        </a>
+      </p>
+      <p>
+        moz-wptsync-bot wants to merge from
+        <code>
+          w3c/web-platform-tests
+        </code>
+        to
+        <code>
+          w3c/web-platform-tests
+        </code>.
+      </p>
+      <dl>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Status</dt>
+            <dd>OPEN</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Opened</dt>
+            <dd>2018-04-16 11:47:15</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Last Updated</dt>
+            <dd>2018-04-16 11:47:27</dd>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Merged</dt>
+            <dd>No</dd>
+          </div>
+          <div class="col-xs-4">
+            
+          </div>
+          <div class="col-xs-4">
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            
+          </div>
+          <div class="col-xs-4">
+            
+          </div>
+        </div>
+      </dl>
+
+      
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Build Number</th>
+              <th>Status</th>
+              <th>Started</th>
+              <th>Ended</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr class="success">
+                <td><a href="../build/27442">27442</a></td>
+                <td>PASSED</td>
+                <td>2018-04-16 11:49:39</td>
+                <td>2018-04-16 11:58:25</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+  </body>
+</html>

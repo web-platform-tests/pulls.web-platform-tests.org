@@ -1,0 +1,122 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pull Request 10304 details</title>
+    <link rel=stylesheet href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/custom.css">
+  </head>
+  <body class="container">
+    <div class="page-header">
+      <h1>
+        Pull Request 10304:
+          <small>Out-of-flow descendants may still be part of the flow thread.</small>
+        </h1>
+    </div>
+
+    
+      <p>
+        <a href="https://github.com/w3c/web-platform-tests/pull/10304">
+          View PR on GitHub
+        </a>
+      </p>
+      <p>
+        chromium-wpt-export-bot wants to merge from
+        <code>
+          w3c/web-platform-tests
+        </code>
+        to
+        <code>
+          w3c/web-platform-tests
+        </code>.
+      </p>
+      <dl>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Status</dt>
+            <dd>CLOSED</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Opened</dt>
+            <dd>2018-04-04 14:39:21</dd>
+          </div>
+          <div class="col-xs-4">
+            <dt>Last Updated</dt>
+            <dd>2018-04-05 07:03:09</dd>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            <dt>Merged</dt>
+            <dd>Yes</dd>
+          </div>
+          <div class="col-xs-4">
+            
+          </div>
+          <div class="col-xs-4">
+            
+              <dt>Closed</dt>
+              <dd>2018-04-05 07:03:08</dd>
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            
+              <dt>Merged By</dt>
+              <dd>chromium-wpt-export-bot</dd>
+            
+          </div>
+          <div class="col-xs-4">
+            
+              <dt>Merged At</dt>
+              <dd>2018-04-05 07:03:08</dd>
+            
+          </div>
+        </div>
+      </dl>
+
+      
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Build Number</th>
+              <th>Status</th>
+              <th>Started</th>
+              <th>Ended</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr class="success">
+                <td><a href="../build/26911">26911</a></td>
+                <td>PASSED</td>
+                <td>2018-04-05 06:53:35</td>
+                <td>2018-04-05 06:59:19</td>
+              </tr>
+            
+              <tr class="success">
+                <td><a href="../build/26882">26882</a></td>
+                <td>PASSED</td>
+                <td>2018-04-04 23:55:04</td>
+                <td>2018-04-05 00:03:56</td>
+              </tr>
+            
+              <tr class="success">
+                <td><a href="../build/26844">26844</a></td>
+                <td>PASSED</td>
+                <td>2018-04-04 14:43:53</td>
+                <td>2018-04-04 14:47:38</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+  </body>
+</html>

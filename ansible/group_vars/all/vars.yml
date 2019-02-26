@@ -162,7 +162,7 @@ users:
     state: present
     real_name: Mike Pennisi
     groups: sudo,www-data
-    shadow_pass:  $1$BpWQ+hY+$v2sj08hfOSkQKu2s0A1pG.
+    shadow_pass: $1$d86cZIpQ$77cPbypTww7pXkW25I2h..
     public_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5tFmLCohqcrIZCfVr1VUhYBUBEILYHfgcMpTFHJIgmLGIqv7NMh2UfGV52vd7gsYL+bxfwwBrP6hT2t9v0xkfcKHqmIrFbKsgOIVn0SwrgcwHNBQixlXjLqH38xF5SWrxDJelNZZuFMmb6gih8d7H7/5xsUzQdQ84D37tZO8IQez7CaxNm3jS8d4eXBBNS7fh0Uqi+6i5PuMNK9gVLyHVClRSr+xY63MW+v+yvWf9Zlz4uuYoKmCdxFU6rjBwjrqQfeynWV7ThWPIW4XIlPPGeTfA9Gy5dxWcSTguaoTrQaO38bL30OFJR5wSNwrNYwbyndQoigT1Q9vymHiI0rqEQ== mike@mikepennisi.com
 

@@ -102,7 +102,7 @@ Examples:
 2. Test a configuration on staging
   - `./run-playbook.sh configure staging commit=test-config --user=yourusername`
 3. Update the users on the production server without restarting nginx/uWSGI:
-  - `.run-playbook.sh configure production --tags=users --user=yourusername`
+  - `./run-playbook.sh configure production --tags=users --user=yourusername`
 
 Useful flags (in addition to those listed above):
 

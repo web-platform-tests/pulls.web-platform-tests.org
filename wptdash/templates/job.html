@@ -129,7 +129,14 @@
           </table>
         {% endif %}
         <h3>All Results</h3>
-        {% for result in job.tests %}
+        {% if job.tests|length > 100 %}
+          <div class="bg-info">
+           This job has {{job.tests|length}} test results which is more than
+           this website is capable of visualizing. Only the first 100 results
+            are displayed below.
+          </div>
+        {% endif %}
+        {% for result in job.tests[:100] %}
           {% if not result.test.parent %}
             <details>
               <summary><code>{{ result.test.id }}</code></summary>
